@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+	    .content{
+	        width: 510px;
+	        height: 660px;
+	        border: 2px solid black;
+	        margin: 0 auto;
+	        position: relative;
+	    }
+	    .content>div{
+	        position: absolute;
+	        width: 150px;
+	        height: 200px;
+	        margin: 10px;
+	        background: blueviolet;
+	        background: url(img/7.jpg) no-repeat center; 
+	        background-size: 100% 100%;
+	        line-height: 200px;
+	        color: #000;
+	        text-align: center;
+	        transition-duration: 1s;
+	        box-shadow: 2px 2px  2px  2px gray;
+	        border-radius: 10px;
+	    }
+	    .content .chou{
+	        height:120px;
+	        line-height: 120px;
+	        background:rgb(241,186,112);
+	        color: #fff;
+	        text-align: center;
+	        transition: 0;
+	        border-radius: 15px;
+	        box-shadow: none;
+	    }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="pai"></div>
+        <div class="pai"></div>
+        <div class="pai"></div>
+        <div class="pai"></div>
+        <div class="chou">点我抽奖</div>
+        <div class="pai"></div>
+        <div class="pai"></div>
+        <div class="pai"></div>
+        <div class="pai"></div>
+    </div>
+    <script src="jquery_1.12.4.min.js"></script>
+	<script>
+		let odiv=document.querySelectorAll('.content>div')
+		//确定定位
+		ding()
+		function ding(){
+		    for(let i=0;i<odiv.length;i++){
+		        odiv[i].style.left=parseInt(i%3)*(150+20)+'px';
+		        odiv[i].style.top=parseInt(i/3)*(200+20)+'px';
+		    }
+		    odiv[4].style.top='260px'
+		}
+		
+		//随机奖励
+		let pai=document.querySelectorAll('.content>.pai')
+		function suiji(arr){
+		    arr.sort(function(){
+		        return Math.random()-0.5
+		    })
+		    console.log(arr)
+		    for(let i=0;i<pai.length;i++){
+		        pai[i].innerHTML=arr[i]
+		    }
+		}
+		//点击抽奖
+		let chou=document.querySelector('.chou');
+		//抽奖动画
+		chou.onclick=function(){
+		    setTimeout(function(){
+		        $('.pai').css({'transform':'rotateY(180deg)'})
+		        $('.pai').html('')
+		    },0)
+		    setTimeout(function(){
+		        $('.pai').css({'background':'url(img/7.jpg) no-repeat center','background-size':'100% 100%','left':'170px','top':'220px'})
+		    },500)
+		    setTimeout(function(){
+		        ding()
+		    },1500)  
+		}
+		//抽取奖品
+		$('.pai').click(function(){
+		    let arr1=['游戏币100','公仔一个','画笔一个','哎呦~~','再抽一次','金豆100','相片一张','金豆20']
+		    let index=0;
+		    if($(this).index()>4){
+		        index=$(this).index()-1
+		    }else{
+		        index=$(this).index()
+		    }
+		    console.log(index)
+		    setTimeout(function(){
+		        $('.pai').eq(index).css('transform','rotateY(360deg)')
+		    },0)
+		    setTimeout(function(){
+		        $('.pai').eq(index).css('background','rgb(251,236,226)')
+		        arr1.sort(function(){
+		            return Math.random()-0.5
+		        })
+		        $('.pai').eq(index).html(arr1[index])
+		    },500)
+		    setTimeout(function(){
+		        $('.pai').css({'transform':'rotateY(360deg)'})
+		    },1500)
+		    setTimeout(function(){
+		        $('.pai').css('background','rgb(251,236,226)')
+		        for(let i=0;i<pai.length;i++){
+		            if(i==index){
+		                continue;
+		            }else{
+		                pai[i].innerHTML=arr1[i]
+		            }
+		        }
+		    },2000)
+		})
+	</script>
+	</body>
+</html>

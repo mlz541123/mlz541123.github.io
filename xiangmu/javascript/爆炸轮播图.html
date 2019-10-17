@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style type="text/css">
+		
+		#content {
+			width: 600px;
+			height: 400px;
+			border:1px solid #ccc;
+			margin: 100px auto;
+			transform-style: preserve-3d;
+			perspective: 500px;
+			position: relative;
+		}
+
+		.parent {
+			width: 600px;
+			height: 400px;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+
+	</style>
+</head>
+<body>
+
+	<div id="content">
+		<!-- <div>
+			div*400
+		</div>
+
+		<div>
+			div*400
+		</div> -->
+	</div>
+	
+</body>
+<script type="text/javascript">
+
+
+	var zIndex = 9999999;
+	var index = 0;
+
+	boom();
+
+
+
+	function boom() {
+		zIndex--;
+		var oParent = document.createElement('div');
+		oParent.className = 'parent';
+		oParent.style.zIndex = zIndex;
+		content.appendChild(oParent);
+
+		index++;
+		if (index>4) {
+			index=1;
+		}
+
+		
+		var allDiv = [];
+		for(var i = 0; i < 20; i++){
+			for(var j = 0; j < 20; j++){
+				var oDiv = document.createElement('div');
+				oDiv.style.width = '30px';
+				oDiv.style.height = '20px';
+				oDiv.style.backgroundImage = `url(img/${index}.jpg)`;
+				oDiv.style.backgroundSize = '600px 400px';
+				oDiv.style.float = 'left';
+				oDiv.style.backgroundPositionX = -30*j+'px';
+				oDiv.style.backgroundPositionY = -20*i+'px';
+				oDiv.style.transition = Math.random()+0.5+'s';
+				oParent.appendChild(oDiv);
+
+				allDiv.push(oDiv);
+			}
+		}
+
+		setTimeout(function () {
+			// 爆炸 : 3D: 位移  旋转   透明度
+
+			boom();
+
+			allDiv.forEach( function(item, index) {
+				item.style.transform = `
+					translateX(${Math.random()*400-200}px)
+					translateY(${Math.random()*400-200}px)
+					rotateX(${Math.random()*360-180}deg)
+					rotateY(${Math.random()*360-180}deg)
+					rotateZ(${Math.random()*180-90}deg)
+				`;
+
+				item.style.opacity = '0'
+			});
+		}, 2000);
+
+
+		setTimeout(function () {
+			oParent.remove();
+		}, 3500);
+	}
+
+
+</script>
+</html>

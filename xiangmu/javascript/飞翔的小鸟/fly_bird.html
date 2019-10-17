@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<title>飞翔的小鸟</title>
+	<link rel="icon" href="images/feng_02.jpg">
+	<meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+	<!-- <script src="jquery_1.12.4.min.js"></script> -->
+	<style>
+		*{margin: 0;padding: 0;user-select: none;}
+		.box{
+			width: 100vw;
+			min-height: 100vh;
+			background-image: url(images/bg.png);
+			background-size: 100vw 100vh;
+			overflow: hidden;
+		}
+		.bird{
+			width: 6vw;
+			height: 5vw;
+			background-image: url(images/0.gif);
+			background-size: 6vw 5vw;
+			position: absolute;
+			left: 50vw;
+			top: 38vh;
+			margin-left: -3vw;
+			z-index: 9;
+		}
+		.footer{
+			width: 100vw;
+			height: 15vh;
+			background-image: url(images/ground.png);
+			background-size: 100% 100%;
+			position: fixed;
+			bottom: 0;
+		}
+		.guan{
+			width: 15vw;
+			height: 85vh;
+			position: absolute;
+			top: 0;
+			left: 115vw;
+		}
+		.shang{
+			width: 15vw;
+			/*height: 20vw;*/
+			background-image: url(images/bird_05.png);
+			background-size: 100% 100%;
+			position: absolute;
+			top: 0;
+		}
+		.xia{
+			width: 15vw;
+			/*height: 20vw;*/
+			background-image: url(images/bird_04.png);
+			background-size: 100% 100%;
+			position: absolute;
+			bottom: 0;
+		}
+		.ready{
+			width: 40vw;
+			height: 25vw;
+			background-image: url(images/bird_01.png);
+			background-size: 40vw 25vw;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-left: -20vw;
+			margin-top: -13.5vw;
+			z-index: 10;
+		}
+		.ready-zi{
+			width: 100vw;
+			height: 25vw;
+			background-image: url(images/bird_06.png);
+			background-size: 100vw 25vw;
+			position: absolute;
+			top: 40vw;
+			left: 50%;
+			margin-left: -50vw;
+			z-index: 10;
+		}
+		.fen{
+			width: 50vw;
+			line-height: 10vw;
+			font-size: 5vw;
+			color: red;
+			position: absolute;
+			top: 5vw;
+			left: 5vw;
+			z-index: 10;
+			background-image: url('images/fen.png');
+			background-size: 10vw 10vw;
+			background-repeat: no-repeat;
+			background-position: left center;
+			padding-left: 12vw;
+		}
+		audio{
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div class="bird"></div>
+		<div class="fen">分数：000</div>
+		<div class="guan">
+			<div class="shang"></div>
+			<div class="xia"></div>
+		</div>
+		<div class="footer"></div>
+		<div class="ready-zi"></div>
+		<div class="ready"></div>
+	</div>
+	<audio src="小小浩、欧阳朵 - 落单恋人.mp3" controls></audio>
+</body>
+<script>
+	var num = 2,
+		open = true;
+	var niao = 0,// 小鸟的动作
+		box_bg = 0,// 背景动起来
+		gu_bg = 0,// 管子的移动
+		gu_ci = 0,// 管子消失的次数
+		ni_le = 20;// 鸟的left
+	var bird = document.querySelector('.bird');
+	var box = document.querySelector('.box');
+	var guan = document.querySelector('.guan');
+	var guan_top = guan.querySelector('.shang');
+	var guan_btm = guan.querySelector('.xia');
+	var footer = document.querySelector('.footer');
+	var go = document.querySelector('.ready');
+	var ready = document.querySelector('.ready-zi');
+	var fen = document.querySelector('.fen');
+	var niaotop = bird.offsetTop,// 小鸟距离顶部的距离
+		fo_top = footer.offsetTop;// 公路距离顶部的距离
+	var timer = null;
+	setInterval(function(){
+		niao++;
+		// if(niao > 2){
+		// 	niao = 0;
+		// } // 太Low
+		bird.style.backgroundImage = 'url(images/'+niao % 3+'.gif)';
+	},100)
+	go.onclick = function(){
+		click()
+	}
+	function click(){
+		document.querySelector('audio').play();
+		go.style.display = 'none';
+		ready.style.display = 'none';
+		bird.style.left = '20vw';
+		bird.style.top = '0vh';
+		ni_top = 2;
+		gu_bg = 0;
+		ni_le = 20;
+		num = 0;
+		guan.style.left = '100vw';
+		timer = setInterval(function(){
+			ni_top += 1;
+			box_bg += 5;
+			gu_bg += 1;
+			jianpan();// 键盘事件
+			box.onclick = function(){
+				ni_top -= 5;
+			}// 鼠标事件 点击小鸟上升
+			if(ni_le <= 0){
+				ni_le = 3;
+			}else if(ni_le >= 100){
+				ni_le = 97;
+			}// 限制左边范围
+			bird.style.left = ni_le + 'vw';
+			bird.style.top = ni_top + 'vh';
+			if(open){
+				open=false;
+				num++;
+				if(num<10){
+					fen.innerHTML="分数：00" + num;
+				}else if(num<100){
+					fen.innerHTML="分数：0" + num;
+				}else{
+					fen.innerHTML='分数：' + num;
+				}
+				open=true;
+			}// 计算分数
+			box.style.backgroundPosition = -box_bg + 'px';
+			footer.style.backgroundPosition = -box_bg + 'px';
+			guan.style.left = -gu_bg + 100 + 'vw';
+			if(gu_bg > 115){
+				gu_bg = 1;
+				guan.style.left = -gu_bg*4 + 100  + 'vw';
+				guanh();
+				// document.querySelector('.fen').innerHTML = '分数：'+parseInt(num);// 第二种分数
+			}// 钢管过了几次
+			var guan_l = guan.offsetLeft;// 管道距离box左边的距离
+			var bird_l = bird.offsetLeft,// 鸟距离左侧的距离
+				bird_t = bird.style.top,// 鸟距离顶部的距离
+				bird_b = 80 - parseInt(bird_t) + bird.offsetHeight,
+				gu_bh = 80 - parseInt(guan_top.style.height)+5,// 下管道的高
+				gu_w = guan_top.offsetWidth,// 钢管的宽度
+				bird_w = bird.offsetWidth;// 鸟的宽度
+			if(bird_l + bird_w >= guan_l && guan_l + gu_w >= bird_l && parseInt(bird_t) <= parseInt(guan_top.style.height)){
+				stop()
+			}else if(bird_l + bird_w >= guan_l && guan_l + gu_w >= bird_l && parseInt(bird_b) <= gu_bh){
+				stop()
+			}
+			if(ni_top > 80){
+				stop()
+			}
+			if(ni_top <= 0){
+				ni_top = 0;
+			}
+		},100)
+		guanh();
+	}
+	onkeydown = function (ec){// 键盘事件 回车开始游戏
+		var evt=ec || event;
+		switch(evt.keyCode){
+			case 13:
+				click();
+				break;
+		}
+	}
+	// 结束
+	function stop(){
+		clearInterval(timer);
+		document.querySelector('audio').pause();
+		document.querySelector('audio').currentTime = 0;
+		go.style.display = 'block';
+		ready.style.display = 'block';
+		ready.style.backgroundImage = 'url(images/bird_03.png)';
+	}
+	// 钢管高
+	function guanh(){
+		var gh = Math.random()*40+5;
+		bh = 80 - gh - 10;
+		guan_top.style.height  = gh + 'vh';
+		guan_btm.style.height = bh + 'vh';
+	}
+	function jianpan(){
+		onkeydown = function (ec){// 键盘事件 键盘操控
+			var evt=ec || event;
+			switch(evt.keyCode){
+				case 37:
+					ni_le -= 5;
+					break;
+				case 65:
+					ni_le -= 5;
+					break;
+				case 32:
+					ni_top -= 5;
+					break;
+				case 38:
+					ni_top -= 5;
+					break;
+				case 87:
+					ni_top -= 5;
+					break;
+				case 39:
+					ni_le += 5;
+					break;
+				case 68:
+					ni_le += 5;
+					break;
+				case 40:
+					ni_top += 5;
+					break;
+				case 83:
+					ni_top += 5;
+					break;
+				default: 
+					break;
+			}
+		}
+	}
+</script>
+</html>
