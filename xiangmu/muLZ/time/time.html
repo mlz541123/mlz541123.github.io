@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0;user-select: none;}
+        ul li{
+            display: inline-block;
+        }
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box" v-cloak>
+        <!-- <img :src="src + i" v-for="i in arrImg"> -->
+        <ul>
+            <li><img :src="ht | time"></li>
+            <li><img :src="(h%10) | time"></li>
+            <li><img src="http://www.jq22.com/demo/jQueryClock201702111739/images/mao.png" alt=""></li>
+            <li><img :src="mt | time"></li>
+            <li><img :src="(m%10) | time"></li>
+            <li><img src="http://www.jq22.com/demo/jQueryClock201702111739/images/mao.png" alt=""></li>
+            <li><img :src="st | time"></li>
+            <li><img :src="(s%10) | time"></li>
+        </ul>
+    </div>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    Vue.filter('time',function(val){
+        var src = 'http://www.jq22.com/demo/jQueryClock201702111739/images/';
+        var arrImg = ['0.png','1.png','2.png','3.png','4.png','5.png','6.png','7.png','8.png','9.png'];
+        return src + arrImg[val];
+    })
+    var vm = new Vue({
+        el: '.box',
+        data: {
+            h: '',
+            ht: '',
+            m: '',
+            mt: '',
+            s: '',
+            st: '',
+            timer: null,    
+        },
+        created () {
+            let date = new Date();
+            this.h = date.getHours();
+            this.ht = parseInt(this.h / 10);// 时
+
+            this.m = date.getMinutes();
+            this.mt = parseInt(this.m / 10);// 分    
+
+            this.s = date.getSeconds();
+            this.st = parseInt(this.s / 10);// 秒
+
+            this.timer = setInterval(() => {
+                let date = new Date();
+                this.h = date.getHours();
+                this.ht = parseInt(this.h / 10);// 时
+
+                this.m = date.getMinutes();
+                this.mt = parseInt(this.m / 10);// 分    
+
+                this.s = date.getSeconds();
+                this.st = parseInt(this.s / 10);// 秒
+            },1000)
+        }
+    });
+</script>
+</html>

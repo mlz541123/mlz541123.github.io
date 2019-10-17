@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            list-style: none;
+        }
+        [v-cloak]{
+            display: none;
+        }
+        .box{
+            margin: 20px 20px;
+            border: 1px solid;
+            min-height: 400px;
+            position: relative;
+        }
+        .ul li{
+            width: 25%;
+            height: 50px; 
+            line-height: 50px;
+            /* display: inline-block; */
+            text-align: center;
+            float: left;
+            border: 1px solid;
+            box-sizing: border-box;
+        }
+        .ul li:last-child{
+            line-height: 25px;
+        }
+        .ul .uul li{
+            height: 25px;
+            line-height: 25px;
+            width: 12.5%;
+            border: 1px solid;
+            box-sizing: border-box;
+        }
+        .ul li input{
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+        }
+        .ul .jin li{
+            height: 50px;
+            line-height: 50px;
+            box-sizing: border-box;
+        }
+        .footer{
+            height: 50px;
+            width: 100%;
+            position: absolute;
+            bottom: -52px;
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="box" v-cloak>
+        <ul class="ul">
+            <li>产品</li>
+            <li>数量</li>
+            <li>单价</li>
+            <li>
+                金额
+                <ul class="uul">
+                    <li>千</li>
+                    <li>百</li>
+                    <li>十</li>
+                    <li>万</li>
+                    <li>千</li>
+                    <li>百</li>
+                    <li>十</li>
+                    <li>元</li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="ul">
+            <li><input type="text" v-model="name"></li>
+            <li><input type="text" v-model="num"></li>
+            <li><input type="text" v-model="uni"></li>
+            <li>
+                <ul class="uul jin">
+                    <li>{{qw}}</li>
+                    <li>{{bw}}</li>
+                    <li>{{sw}}</li>
+                    <li>{{wan}}</li>
+                    <li>{{qian}}</li>
+                    <li>{{bai}}</li>
+                    <li>{{shi}}</li>
+                    <li>{{yuan}}</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="footer">合计：{{jia | many}}</div>
+    </div>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    new Vue({
+        el: '.box',
+        data () {
+            return {
+                name: '',
+                num: '',
+                uni: '',
+                sum: '',
+                jia: '',
+
+                yuan: '',
+                shi: '',
+                bai: '',
+                qian: '',
+                wan: '',
+                sw: '',
+                bw: '',
+                qw: '',
+            }
+        },
+        updated () {
+            this.sum = this.num * this.uni
+            this.jia = String(this.sum); 
+            this.yuan = this.jia.charAt(this.jia.length-1)
+            this.shi = this.jia.charAt(this.jia.length-2)
+            this.bai = this.jia.charAt(this.jia.length-3)
+            this.qian = this.jia.charAt(this.jia.length-4)
+            this.wan = this.jia.charAt(this.jia.length-5)
+            this.sw = this.jia.charAt(this.jia.length-6)
+            this.bw = this.jia.charAt(this.jia.length-7)
+            this.qw = this.jia.charAt(this.jia.length-8)
+        },
+        filters: {
+            many: function (val) {
+                var shuArr = [];
+                var ma_shu = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+                var ma_dan = ['仟', '佰', '拾', '万', '仟', '佰', '拾']
+                for (var i = 0; i < val.length; i++) {
+                    shuArr.push(parseInt(val[i]));
+                    shuArr[i] = ma_shu[shuArr[i]]
+                }
+                for (var i = val.length - 1, j = 1; i > 0; i--) {
+                    shuArr.splice(i, 0, ma_dan[ma_dan.length - j++])
+                }
+                shuArr = shuArr.join('')
+                if (val.length >= 1) {
+                    shuArr += '元整'
+                }
+                return shuArr;
+            }
+        },
+    })
+</script>
+</html>

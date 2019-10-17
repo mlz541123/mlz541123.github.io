@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <div class="box">
+        <el-switch open="#2be73d" close="red" :value="type"></el-switch>
+    </div>
+    <template id="switch">
+        <div :style="{width: '100px',height: '30px',backgroundColor: value ? open : close,borderRadius: '20px',border: '5px solid '+ borCol +'',position: 'relative'}" @click="kai">
+            <p :style="{left: value?'70px':'0'}" style="width: 30px;height: 30px;background-color: #fff;border-radius: 50%;position: absolute;left: 70px;transition: .5s"></p>
+        </div>
+    </template>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    Vue.component('el-switch',{
+        props: {
+            open:{
+                default: '#2be73d'
+            },
+            close:{
+                default: '#f00'
+            },
+            value: {
+                type: Boolean,
+                default: true,
+            }
+        },
+        template: '#switch',
+        // data () {
+        //     return {
+        //         borCol: this.open,
+        //     }
+        // },
+        computed: {
+            borCol() {
+                if(this.value){
+                    return this.open
+                }else{
+                    return this.close
+                }
+            }
+        },
+        methods: {
+            kai(ev){
+                if(this.value){
+                    this. value = false;
+                    // this.borCol = this.close
+                    // ev.srcElement.style.left = '0';
+                }else{
+                    this.value = true
+                    // this.borCol = this.open
+                    // ev.srcElement.style.left = '70px';
+                }
+            }
+        }
+    })
+    new Vue({
+        el: '.box',
+        data () {
+            return {
+                type: false,
+            }
+        }
+    })
+</script>
+</html>

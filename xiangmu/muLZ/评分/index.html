@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1375727_r5s8zzdr75.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        [v-cloak]{
+            display: none;
+        }
+        .box i {
+            font-size: 40px;
+            padding: 10px;
+        }
+        .active{
+            color: red;
+            transition: .3s;
+        }
+        span{
+            color: gold;
+            font-size: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box" v-cloak>
+        <div @click >
+            <i class="iconfont icon-decide" v-for="m in zong" @click="ping(m)" @mouseover="over(m)" @mouseleave="leave(m)" :class="{active:kong>=m}"></i>
+            <span>{{dianhuo}}分</span>
+        </div>
+    </div>
+</body>
+    <script src="../js/vue.js"></script>
+    <script>
+        new Vue({
+            el: '.box',
+            data: {
+                zong: 5,
+                kong: 0,
+                dian: false,
+                dianhuo: 0
+            },
+            methods: {
+                ping(i){
+                    // console.log(i)
+                    this.kong = i
+                    this.dian = true
+                    this.dianhuo = i
+                },
+                over(i){
+                    // if(this.dian){
+                    //     this.kong = this.dianhuoi
+                    // }else{
+                    //     this.kong = i
+                    // }
+                    this.kong = i
+                },
+                leave(i){
+                    if(this.dian){
+                        this.kong = this.dianhuo
+                    }else{
+                        this.kong = 0
+                    }
+                }
+            }
+        })
+    </script>
+</html>

@@ -375,10 +375,12 @@ h2.resp-accordion {
 .grid {
 	position: relative;
 	overflow:hidden;
-	background: #000;
+    background: #000;
+    height: 156px;
 }
 .grid img {
-	opacity: 0.8;
+    opacity: 0.8;
+    height: 156px;
 }
 .grid .figcaption {
     padding: 2em 2.5em;

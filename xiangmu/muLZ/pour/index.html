@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0;}
+        [v-cloak]{
+            display: none;
+        }
+        .box{
+            width: 600px;
+            height: 300px;
+            border: 2px solid;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%)
+        }
+        .box h3{
+            line-height: 50px;
+            text-align: center;
+        }
+        .box h3+p{
+            line-height: 20px;
+            text-indent: 2em;
+            padding: 0 5px;
+        }
+        .bottle {
+            width: 100px;
+            height: 140px;
+            border-left: 2px solid;
+            border-right: 2px solid;
+            border-bottom: 2px solid;
+            float: left;
+            line-height: 140px;
+            border-radius: 0 0 10px 10px;
+            position: relative;
+            transform: rotate(0deg);
+            transition: .5s;
+            margin-left: 60px;
+            margin-top: 30px;
+            position: relative;
+        }
+        .bottleColor {
+            width: 100px;
+            height: 100%;
+            font-size: 30px;
+            transition: all .5s;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            background-color: #4444f4b3;
+        }
+        .bottle i {
+            width: 20px;
+            height: 50px;
+            border: 2px solid;
+            display: inline-block;
+            box-sizing: border-box;
+            position: absolute;
+            left: -20px;
+            top: 45px;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+        }
+        .bottle.lift {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="box" v-cloak>
+        <h3>脑筋急转弯</h3>
+        <p>有三个木桶，分别是10L、7L、2L的容量，现在10L的木桶里面装满了水，要求你用7L的木桶和2L的木桶，均匀地把10L的水分成两个5L的</p>
+        <div class="bottle" :class="{lift:key==lift}" v-for="(m,key) in cups" @click="dao(key)">
+            <div class="bottleColor" :style="{height: m.c/m.full*100+'%'}">
+            </div>
+            <i></i>
+            <span>{{m.c}}L</span>
+        </div>
+    </div>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    new Vue({
+		el: '.box',
+		data(){
+			return{
+				lift:null,// 当前举起的杯子为null
+				cups:{// 所有的杯子
+					da:{// 大杯子
+						full: 10,
+						c: 10,
+					},
+					zhong:{// 中杯子
+						full:7,
+						c:0,
+					},
+					xiao:{// 小杯子
+						full: 2,
+						c:0,
+					}
+				}
+			}
+		},
+		methods:{
+			dao(cup) {
+                if (this.lift) {
+                    if (cup == this.lift) {
+                        this.lift = null;
+                        return
+                    }
+                    
+                    // 倒入量
+                    var putIn = this.cups[cup].full - this.cups[cup].c > this.cups[this.lift].c ? this.cups[this.lift].c : this.cups[cup].full - this.cups[cup].c;
+
+                    // 剩余量
+                    var surplus = this.cups[this.lift].c - putIn;
+                    this.cups[cup].c += putIn;
+                    this.cups[this.lift].c = surplus;
+                    this.lift = null;
+                } else {
+                    this.lift = cup;
+                }
+            }
+		}
+	})
+</script>
+</html>

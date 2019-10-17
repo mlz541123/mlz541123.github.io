@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        [v-cloak]{
+            display: none;
+        }
+        .page button {
+            height: 50px;
+            width: 50px;
+            float: left;
+            background: blue;
+            color: #fff;
+        }
+
+        .suo_page {
+            float: left;
+            width: 50px;
+            height: 50px;
+            border: 1px solid;
+            box-sizing: border-box;
+            line-height: 50px;
+            text-align: center;
+        }
+
+        .active {
+            background: red;
+            color: #fff
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box" v-cloak>
+        <div class="page">
+            <button class="head_page" @click="head_page">首页</button>
+            <button class="top_page" @click="top_page">上一页</button>
+            <div class="suo_page" v-for="(i,index) in show_page" :class="current==(facing+index)?'active':''"
+                @click="dot(facing+index)">{{facing+index}}</div>
+            <button class="bottom_page" @click="bottom_page">下一页</button>
+            <button class="foot_page" @click="foot_page">尾页</button>
+        </div>
+    </div>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    new Vue({
+        el: '.box',
+        data: {
+            suo_page: 30,// 所有页
+            see_page: 9,// 最多出现9个
+            current: 1,// 当前页
+        },
+        computed: {
+            show_page() {// 限制最大显示范围
+                if (this.see_page > this.suo_page) {// 如果出现的页大于最大的页数
+                    return this.suo_page;// 返回最大的页数
+                } else {
+                    return this.see_page// 否则返回当前页
+                }
+            },
+            facing() {// 限制在最大显示页的中间
+                if (this.current <= parseInt(this.show_page / 2)) {// 如果当前页小于最大显示页的中间，就显示到1
+                    return 1;
+                } else if (this.current >= this.suo_page - parseInt(this.show_page / 2)) {// 如果当前页大于最大显示页的中间，就显示最大页
+                    return this.suo_page - this.show_page + 1
+                }
+                return this.current - parseInt(this.show_page / 2)// 否则返回当前页
+            }
+        },
+        methods: {
+            head_page() {
+                this.current = 1
+            },
+            top_page() {
+                if (this.current <= 1) {
+                    return false;
+                };
+                this.current--;
+            },
+            bottom_page() {
+                if (this.current >= this.suo_page) {
+                    return false;
+                }
+                this.current++;
+            },
+            foot_page() {
+                this.current = this.suo_page
+            },
+            dot(i) {
+                this.current = i
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <el-row>
+            <el-col span="20" color="red"></el-col>
+
+            <el-col span="10" color="cyan"></el-col>
+            <el-col span="10" color="yellow"></el-col>
+
+            <el-col span="7" color="#eee"></el-col>
+            <el-col span="6" color="#666"></el-col>
+            <el-col span="7" color="#333"></el-col>
+
+            <el-col span="5" color="#f00"></el-col>
+            <el-col span="5" color="#ff0"></el-col>
+            <el-col span="5" color="#0f0"></el-col>
+            <el-col span="5" color="#00f"></el-col>
+        </el-row>
+    </div>
+
+</body>
+<script src="../js/vue.js"></script>
+<script>
+
+    Vue.component('el-row',{
+        template: `<div class="el-row" style="height: auto;background: red;">
+           <slot></slot>
+        </div>`,
+    })
+    Vue.component('el-col',{
+        props: ['span','color'],
+        template: `<div class="el-col" :style="{height: '50px',background: this.color,width: this.span / 20 * 100 + '%',float: 'left'}"></div>`,
+        created () {
+            console.log(this.span,this.color)  
+        },
+    })
+
+    new Vue({
+        el: '.box', 
+    })
+
+</script>
+</html>

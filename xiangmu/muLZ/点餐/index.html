@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1387992_y1utbg03xic.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-decoration: none;
+        }
+        [v-cloak]{
+            display: none;
+        }
+        /* 头部 */
+        .header{
+            height: 100px;
+            line-height: 100px;
+            position: relative;
+            border-bottom: 2px #dfdfdf solid;
+        }
+        .fanhui{
+            position: absolute;
+            left: 34px;
+            font-size: 33px;
+            color:  #3497eb;
+        }
+        .header p{
+            position: absolute;
+            left: 93px;
+            font-size: 36px;
+        }
+        .sousuo{
+            font-size: 33px;
+            position: absolute;
+            right: 93px;
+            color:  #3497eb;
+            font-weight: bold;
+        }
+        .share{
+            font-size: 33px;
+            position: absolute;
+            right: 34px;
+        }
+        /* nav */
+        .nav .nul{
+            line-height: 100px;
+            display: flex;
+            flex-direction:row;
+            justify-content: space-around;
+            font-size: 28px;
+            box-sizing: border-box;
+            margin-bottom: 14px;
+        }
+        .action{
+            border-bottom: 3px solid #3497eb;
+        }
+        /* 点餐 */
+        .main{
+            height: 100vh;
+            margin-bottom: 97px;
+        }
+        .main .aside{
+            height: 100%;
+            line-height: 83px;
+            width: 153px;
+            font-size: 22px;
+            background: #f8f8f8;
+            float: left;
+            text-align: center;
+        }
+        .main .aside a{
+            height: 83px;
+            width: 153px;
+            color: #989898;
+            display: block;
+        }
+        .active{
+            background: #fff;
+            color: #888;
+        }
+        .ma_content{
+            height: 100%;
+            margin-left: 175px;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+        .ma_content h3{
+            line-height: 96px;
+            font-size: 24px;
+            color: #717171;
+        }
+        .caipin{
+            height: 191px;
+            margin-bottom: 41px;
+        }
+        .caitu{
+            width: 191px;
+            height: 191px;
+            border-radius: 20px;
+            overflow: hidden;
+            float: left;
+            margin-right: 20px;
+        }
+        .caitu img{
+            width: 100%;
+            height: 100%;
+        }
+        .caiqing{
+            height: 191px;
+            position: relative;
+        }
+        .caiqing h4{
+            font-size: 28px;
+            line-height: 42px;
+            color: #2c2c2c;
+        }
+        .caiqing h5{
+            font-size: 22px;
+            color: #ee6946;
+            position: absolute;
+            bottom: 14px;
+            left: 211px;
+        }
+        .caiqing p{
+            font-size: 18px;
+            color: #a8a8a8;
+            padding-top: 16px;
+        }
+        .caiqing p span:first-child{
+            margin-right: 20px;
+        }
+        .shopping{
+            width: 150px;
+            height: 44px;
+            position: absolute;
+            bottom: 10px;
+            right: 25px;
+        }
+        /* 尾部 */
+        .footer{
+            height: 97px;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #515154;
+        }
+        .jie{
+            position: absolute;
+            right: 0;
+            width: 211px;
+            height: 97px;
+            background: #37cb72;
+            color: #fff;
+            border: none;
+            font-size: 28px;
+        }
+        .shop_car{
+            width: 100px;
+            height: 100px;
+            background: #348de4;
+            border: 10px solid #515154;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 97px;
+            position: absolute;
+            top: -30px;
+            left: 50px;
+        }
+        .shop_car i{
+            font-size: 70px;
+            color: #fff;
+        }
+        .footer p{
+            font-size: 40px;
+            color: #fff;
+            position: absolute;
+            left: 168px;
+            top: 20px;
+        }
+        .footer .shop_car .geshu{
+            position: absolute;
+            right: -30px;
+            top: -30px;
+            width: 60px;
+            height: 60px;
+            background: red;
+            font-size: 30px;
+            line-height: 60px;
+            border-radius: 50%;
+            color: #fff;
+        }
+    </style>
+</head> 
+<body>
+    <div class="box" v-cloak>
+        <div class="container">
+            <!-- 头部 -->
+            <div class="header">
+                <i class="iconfont icon-htmal5icon37 fanhui"></i>
+                <p>豪门商铺(北京店)</p>
+                <i class="iconfont icon-sousuo sousuo"></i>
+                <i class="iconfont icon-fenxiang share"></i>
+            </div>
+            <!-- 点餐还是评价 -->
+            <div class="nav">
+                <ul class="nul">
+                    <li v-for="i,index in shop" @click="assess(index)" :class="shops == index ? 'action' : ''">{{i}}</li>
+                </ul>
+            </div>
+            <!-- 点餐部分 -->
+            <div class="main">
+                <div class="aside">
+                    <div class="can" v-for="i,m in mold" @click="kind(m)" :class="molds == m ? 'active' : ''">
+                        <a :href="'#' + m">{{i}}</a>
+                    </div>
+                </div>
+                <div class="ma_content">
+                    <div v-for="i,m in caiName">
+                        <h3 :id="m">{{i}}</h3>
+                        <div v-for="m,index in arr" v-if="i == m.kind">
+                            <div class="caipin">
+                                <div class="caitu">
+                                    <img :src="m.image" alt="">
+                                </div>
+                                <div class="caiqing">
+                                    <h4>{{m.name}}</h4>
+                                    <p><span>月售{{m.sale}}份</span><span>好评率{{m.commit}}</span></p>
+                                    <h5>单价：{{m.sellCount}}</h5>
+                                    <div class="shopping">
+                                        <el-shop  v-model="m.num" @input="btn($event,m.sellCount,index)"></el-shop>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 付款 -->
+            <div class="footer">
+                <div class="shop_car">
+                    <i class="iconfont icon-htmal5icon29"></i>
+                    <span class="geshu" v-if="open">{{meige}}</span>
+                </div>
+                <p>￥{{zong}}</p>
+                <button class="jie">去结算</button>
+            </div>
+        </div>
+    </div>
+    <template id="el_shop">
+        <div>
+            <i class="iconfont icon-jianshao jian" @click="jian" style="font-size: 44px;color: #3497eb;float: left;"></i>
+            <input type="text" style="width: 58px;height: 44px;font-size: 26px;text-align: center;border: none;" v-model="num">
+            <i class="iconfont icon-jia jia" @click="jia" style="font-size: 44px;color: #3497eb;float: right;"></i>
+        </div>
+    </template>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    Vue.component('el-shop',{
+        template: '#el_shop',
+        props:['value'],
+        computed:{
+            num:{
+                get(){
+                    return this.value;
+                },
+                set(v){
+                    this.$emit('input',v);
+                }
+            }
+        },
+        methods: {
+            jian(i){
+                if(this.num <= 0){
+                    return false
+                }
+                this.num--;  
+                // console.log(this.num)           
+            },
+            jia(i){
+                this.num++;
+                // console.log(this.num)   
+            }
+        },
+    })
+    new Vue({
+        el: '.box',
+        data () {
+            return {
+                shop: ['点餐','评论','商家'],
+                shops: 0,
+                mold: ['主食','豪门套餐','流食','凉菜','豪门特色冷饮'],
+                molds: 0,
+                // manys: 0,
+                // ge: 0,
+                index: 0,
+                arr: [
+                    { name: "扁豆焖面", image: "http://fuss10.elemecdn.com/c/6b/29e3d29b0db63d36f7c500bca31d8jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 8, kind: "主食",sale: '180',commit:'80%',num: 0,},
+                    { name: "豪华单人套餐", image: "http://fuss10.elemecdn.com/6/72/cb844f0bb60c502c6d5c05e0bddf5jpeg.jpeg?imageView2/1/w/114/h/114", sellCount: 80, kind: "豪门套餐",sale: '1800',commit:'80%',num: 0,},
+                    { name: "皮蛋瘦肉粥", image: "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 2, kind: "流食",sale: '256',commit:'90%' ,num: 0,},
+                    { name: "豪华单人套餐", image: "http://fuss10.elemecdn.com/6/72/cb844f0bb60c502c6d5c05e0bddf5jpeg.jpeg?imageView2/1/w/114/h/114", sellCount: 80, kind: "豪门套餐",sale: '1800',commit:'80%',num: 0,},
+                    { name: "葱花饼", image: "http://fuss10.elemecdn.com/f/28/a51e7b18751bcdf871648a23fd3b4jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 10, kind: "主食",sale: '189',commit:'70%' ,num: 0,},
+                    { name: "牛肉馅饼", image: "http://fuss10.elemecdn.com/d/b9/bcab0e8ad97758e65ae5a62b2664ejpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 15, kind: "主食",sale: '520',commit:'82%' ,num: 0,},
+                    { name: "招牌锅贴/10个", image: "http://fuss10.elemecdn.com/7/72/9a580c1462ca1e4d3c07e112bc035jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 7, kind: "主食",sale: '180',commit:'50%' ,num: 0,},
+                    { name: "黄金南瓜粥", image: "http://fuss10.elemecdn.com/8/a6/453f65f16b1391942af11511b7a90jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 2, kind: "流食",sale: '152',commit:'85%' ,num: 0,},
+                    { name: "红豆薏米美肤粥", image: "http://fuss10.elemecdn.com/d/22/260bd78ee6ac6051136c5447fe307jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 3, kind: "流食",sale: '192',commit:'85%' ,num: 0,},
+                    { name: "八宝酱菜", image: "http://fuss10.elemecdn.com/9/b5/469d8854f9a3a03797933fd01398bjpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 1, kind: "凉菜",sale: '50',commit:'40%' ,num: 0,},
+                    { name: "田园蔬菜粥", image: 'http://fuss10.elemecdn.com/a/94/7371083792c19df00e546b29e344cjpeg.jpeg?imageView2/1/w/750/h/750', sellCount: 2, kind: "流食",sale: '40',commit:'30%' ,num: 0,},
+                    { name: "糊塌子", image: "http://fuss10.elemecdn.com/0/05/097a2a59fd2a2292d08067e16380cjpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 8, kind: "主食",sale: '152',commit:'85%' ,num: 0,},
+                    { name: "扁豆焖面", image: "http://fuss10.elemecdn.com/c/6b/29e3d29b0db63d36f7c500bca31d8jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 8, kind: "主食",sale: '180',commit:'80%',num: 0,},
+                    { name: "皮蛋瘦肉粥", image: "http://fuss10.elemecdn.com/c/cd/c12745ed8a5171e13b427dbc39401jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 2, kind: "流食",sale: '256',commit:'90%' ,num: 0,},
+                    { name: "葱花饼", image: "http://fuss10.elemecdn.com/f/28/a51e7b18751bcdf871648a23fd3b4jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 10, kind: "主食",sale: '189',commit:'70%' ,num: 0,},
+                    { name: "牛肉馅饼", image: "http://fuss10.elemecdn.com/d/b9/bcab0e8ad97758e65ae5a62b2664ejpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 15, kind: "主食",sale: '520',commit:'82%' ,num: 0,},
+                    { name: "招牌锅贴/10个", image: "http://fuss10.elemecdn.com/7/72/9a580c1462ca1e4d3c07e112bc035jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 7, kind: "主食",sale: '180',commit:'50%' ,num: 0,},
+                    { name: "黄金南瓜粥", image: "http://fuss10.elemecdn.com/8/a6/453f65f16b1391942af11511b7a90jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 2, kind: "流食",sale: '152',commit:'85%' ,num: 0,},
+                    { name: "红豆薏米美肤粥", image: "http://fuss10.elemecdn.com/d/22/260bd78ee6ac6051136c5447fe307jpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 3, kind: "流食",sale: '192',commit:'85%' ,num: 0,},
+                    { name: "八宝酱菜", image: "http://fuss10.elemecdn.com/9/b5/469d8854f9a3a03797933fd01398bjpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 1, kind: "凉菜",sale: '50',commit:'40%' ,num: 0,},
+                    { name: "田园蔬菜粥", image: 'http://fuss10.elemecdn.com/a/94/7371083792c19df00e546b29e344cjpeg.jpeg?imageView2/1/w/750/h/750', sellCount: 2, kind: "流食",sale: '40',commit:'30%' ,num: 0,},
+                    { name: "糊塌子", image: "http://fuss10.elemecdn.com/0/05/097a2a59fd2a2292d08067e16380cjpeg.jpeg?imageView2/1/w/750/h/750", sellCount: 8, kind: "主食",sale: '152',commit:'85%' ,num: 0,}
+                ],
+                open: false,
+            }
+        },
+        methods: {
+            assess(i){
+                this.shops = i
+            },
+            kind(i){
+                this.molds = i
+            },
+            btn(item,many,index){
+                if(this.meige){
+                    this.open = true;
+                }else{
+                    this.open = false
+                }
+            }
+        },
+        computed:{
+            caiName() {
+                let oArr = [];
+                for (let i = 0; i < this.arr.length; i++) {
+                    if (oArr.indexOf(this.arr[i].kind) == -1) {
+                        oArr.push(this.arr[i].kind)
+                    }
+                }
+                return oArr;
+            },
+            zong(){
+                let quan = 0;
+                for(let i = 0;i < this.arr.length;i++){
+                    quan += this.arr[i].num * this.arr[i].sellCount;
+                }
+                return quan;
+            },
+            meige(){
+                let ge = 0;
+                for(let i = 0;i < this.arr.length;i++){
+                    ge += this.arr[i].num
+                }
+                return ge;
+            }
+        }
+    })
+</script>
+</html>

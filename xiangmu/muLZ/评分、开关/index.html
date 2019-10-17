@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1375727_r5s8zzdr75.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <el-rate></el-rate>
+    </div>
+    <template id="rate">
+        <div>
+            <i class="iconfont icon-pingfen-xing" v-for="i in zong" @click="ping(i)" @mouseover="over(i)" @mouseleave="leave(i)" :style="{color:kong>=i?'red':'',fontSize: '40px',margin: '10px'}"></i>
+            <span style="font-size: 40px;color: gold;">{{feng}}分</span>
+        </div>
+    </template>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    Vue.component('el-rate',{
+        template: '#rate',
+        data(){
+            return {
+                zong: 5,
+                kong: 0,
+                dian: false,
+                feng: 0,
+            }
+        },
+        methods: {
+            ping(i){
+                this.kong = i;
+                this.dian = true;
+                this.feng = i;
+            },
+            over(i){
+                this.kong = i;
+            },
+            leave(i){
+                if(this.dian){
+                    this.kong = this.feng;
+                }else{
+                    this.kong = 0;
+                }
+            }
+        }
+    })
+    new Vue({
+        el: '.box',
+    })
+</script>
+</html>

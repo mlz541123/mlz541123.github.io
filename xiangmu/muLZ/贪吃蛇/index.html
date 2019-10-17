@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0;}
+        .box{
+            width: 400px;
+            height: 400px;
+            position: relative;
+            background-image: url('../images/1.jpg');
+            background-size: cover;
+            margin: 50px auto;
+        }
+        .map{
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            border: 1px solid #eee;
+            box-shadow: border-box;
+        }
+        .snake{
+            background: red;
+            border-radius: 50%;
+        }
+        .food{
+            background-image: url('./pingguo.png');
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <template v-for="mx,x in map">
+            <div ref="map" v-for="my,y in map" class="map" :style="{left: x*20+'px',top: y*20+'px'}" :class="{snake:posiSnake.indexOf(x+','+y)>-1,food: food==x+','+y}">
+            </div>            
+        </template>
+        <p>{{fen}}</p>
+    </div>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    // 创建网格
+    var vm = new Vue({
+        el: '.box',
+        data () {
+            return {
+                map: 20,// 地图
+                snake: [[0,0],[0,1],[0,2]],// 创建蛇
+                food: '',
+                direction: '下',
+                timer: null,
+                keyCode: null,
+                fen: 0,
+            }
+        },
+        computed: {
+            posiSnake(){
+                var snakeArr = [];
+                this.snake.forEach((element) => {
+                    snakeArr.push(element.toString())
+                })
+                return snakeArr;
+            },
+            next(){
+                var next_arr = [];
+                switch (this.direction){
+                    case '下':
+                    next_arr.push(this.snake[this.snake.length-1][0])
+                    next_arr.push(this.snake[this.snake.length-1][1]+1)
+                        break;
+                    case '上':
+                    next_arr.push(this.snake[this.snake.length-1][0])
+                    next_arr.push(this.snake[this.snake.length-1][1]-1)
+                        break;
+                    case '左':
+                    next_arr.push(this.snake[this.snake.length-1][0]-1)
+                    next_arr.push(this.snake[this.snake.length-1][1])
+                        break;
+                    case '右':
+                    next_arr.push(this.snake[this.snake.length-1][0]+1)
+                    next_arr.push(this.snake[this.snake.length-1][1])
+                        break;
+                }
+                return next_arr;
+            }
+        },
+        methods: {
+            go(){
+                if(this.next != this.food){
+                    this.snake.shift()
+                }else{
+                    this.createfood()
+                    this.fen++
+                }
+                // this.snake.shift();
+                this.snake.push(this.next)
+            },
+            createfood(){
+                var x = parseInt(Math.random() * 20);
+                var y = parseInt(Math.random() * 20);
+                this.food = x+','+y
+            },
+        },
+        created () {
+            this.createfood();
+            var that = this;
+
+            document.onkeydown = function(ev){
+                this.keyCode = ev.keyCode
+                clearInterval(that.timer)
+                switch (this.keyCode){
+                    case 37:
+                        if(that.direction != '右'){
+                            that.direction = '左'
+                        }
+                        break;
+                    case 38:
+                        if(that.direction != '下'){
+                            that.direction = '上'
+                        }
+                        break;
+                    case 39:
+                        if(that.direction != '左'){
+                            that.direction = '右'
+                        }
+                        break;
+                    case 40:
+                        if(that.direction != '上'){
+                            that.direction = '下'
+                        }
+                        break;
+                }
+                that.timer = setInterval(() => {
+                    that.go()
+                    if(that.next[0] > that.map || that.next[1] > that.map || that.next[0] < -1 || that.next[1] < -1){
+                        alert('死亡')
+                        clearInterval(that.timer)
+                        document.onkeydown = null
+                        return false;
+                    }
+                },200)
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0;}
+        .shadow{
+            width: 200px;
+            height: 200px;
+            background: cyan;
+            border: 1px solid;
+            margin: 10px auto;
+        }
+        .shadow1{
+            width: 200px;
+            height: 200px;
+            background: cyan;
+            border: 1px solid;
+            margin: 100px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+            <!-- value: 条件 -->
+            <!-- arg: 颜色 -->
+        <div class="shadow" v-shadow="2>1">默认颜色</div>
+        <div class="shadow" v-shadow:blue="1>2">条件错误</div>
+        <div class="shadow" v-shadow:red="2>1">条件正确，有颜色</div>
+    </div>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+    Vue.directive('shadow',{
+        bind(el,binding){
+            // console.log(binding.value)
+            if(binding.value == ''){
+                return false;
+            }else if (binding.value){
+                el.onmousemove = function(ev){
+                    let evx = ev.clientX;
+                    let evy = ev.clientY;
+                    let elx = el.offsetLeft + el.offsetWidth / 2;
+                    let ely = el.offsetTop + el.offsetHeight / 2;
+
+                    let shx = (elx - evx) / 4;
+                    let shy = (ely - evy) / 4;
+                    if(!binding.arg){
+                        el.style.boxShadow = `${shx}px ${shy}px 10px 2px #000`
+                    }else{
+                        el.style.boxShadow = `${shx}px ${shy}px 10px 2px ${binding.arg}`
+                    }
+                }
+                el.onmouseleave = function(){
+                    el.style.boxShadow = null;
+                }
+            }else{
+                return false;
+            }
+        }
+    })
+    new Vue({
+        el: '.box',
+        data: {
+
+        },
+    })
+</script>
+
+</html>

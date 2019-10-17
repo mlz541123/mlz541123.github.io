@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <style>
+        *{margin: 0;padding: 0;}
+        
+    </style>
+</head>
+<body>
+    <div class="box">
+        <el-slider></el-slider>
+    </div>
+</body>
+<script src="../js/vue.js"></script>
+<script>
+
+    Vue.component('el-slider',{
+        props: ['value'],
+        template: `
+        <div style="width:744px;height:10px;border-radius:12px;background: #999;position: relative;margin: 50px auto;" class="slider">
+            <i class="bi" style="height:100%;background: skyblue;border-radius: 12px;width: 0;position: absolute;"></i>
+            <span style="width:18px;height:18px;border:2px solid aqua;border-radius: 50%;position: absolute;left:0;top:50%;transform: translateY(-50%);background: #fff;cursor:pointer;">
+                <p style="width: auto;height: 20px;background: #000;color: #fff;position: absolute;left:0;top:120%;">{{vnum}}</p>
+            </span>
+        </div>`,
+        // computed: {
+        //     vnum:{
+        //         get(){
+        //             return this.value
+        //         },
+        //         set(v){
+        //             this.$emit('slider',v);
+        //         }
+        //     }
+        // },
+        data(){
+            return {
+                vnum: 0,
+            }
+        },
+        mounted () {
+            var aspan = document.querySelector('span');
+            var sli = document.querySelector('.slider');
+            var bi = document.querySelector('.bi');
+            var sliw = sli.offsetWidth;
+            var spw = aspan.offsetWidth;
+            aspan.onmousedown = function(ev){
+                evx = ev.clientX - this.offsetLeft;
+                var ospan = this;
+                document.onmousemove = function(evt){
+                    var offx = evt.clientX - evx;
+                    offx = offx < 0 ? 0 : offx;
+                    offx = offx > sliw - spw ? sliw - spw : offx;
+                    ospan.style.left = offx + 'px';
+                    bi.style.width = offx + (spw / 2) + 'px';
+                    var sm = parseInt((sliw - 44) / 100);
+                    if(offx < 22){
+                        this.vnum = 0
+                    }else{
+                        this.vnum = parseInt((offx - 22) / sm)
+                    }
+                }
+            }
+            document.onmouseup = function(){
+                document.onmousemove = null;
+            }
+        },
+    })
+
+    new Vue({
+        el: '.box',
+    })
+</script>
+</html>
